@@ -4,10 +4,16 @@ const QRCode = require('qrcode');
 const crypto = require('crypto');
 const { db } = require('../database');
 const { authenticateToken, authorizeRole } = require('../middleware/auth');
+const { 
+  VerifiableCredential, 
+  createComprehensiveCredential,
+  createEmploymentCredential,
+  createEducationCredential
+} = require('../utils/credentials');
 
 const router = express.Router();
 
-// Generate credential signature
+// Generate credential signature (legacy support)
 function generateSignature(credentialData) {
   const hash = crypto.createHash('sha256');
   hash.update(JSON.stringify(credentialData));

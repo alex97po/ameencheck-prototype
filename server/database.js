@@ -270,6 +270,45 @@ function insertSampleData() {
   db.run(`INSERT OR IGNORE INTO employment_records (id, candidate_id, company_name, job_title, start_date, end_date, supervisor_name, supervisor_contact, verification_status) 
     VALUES ('emp-rec-2', 'cand-4', 'Global Marketing Solutions', 'Marketing Specialist', '2017-03', '2023-06', 'Sarah Johnson', 'hr@gms.com', 'verified')`);
 
+  // Create sample credential for main demo candidate (Ahmed Ali - cand-1)
+  const mainCredentialDetails = JSON.stringify({
+    verification_id: 'demo-verification-1',
+    candidate_name: 'Ahmed Ali',
+    position: 'Software Engineer',
+    employer: 'Tech Solutions LLC',
+    package_type: 'Standard Background Check',
+    completion_date: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+    checks_completed: {
+      'Identity Verification': 'Pass',
+      'Education Verification': 'Pass',
+      'Employment Verification': 'Pass',
+      'Criminal Record Check': 'Pass'
+    },
+    verifications: [
+      'Identity verified via official documents',
+      'Bachelor\'s degree in Computer Science confirmed',
+      'Employment history verified with previous employers',
+      'Clean criminal record verified'
+    ],
+    warnings: 0,
+    overall_result: 'VERIFIED'
+  });
+
+  db.run(`INSERT OR IGNORE INTO credentials (id, candidate_id, type, title, details, issued_date, expiry_date, status, verification_url, qr_code, signature) 
+    VALUES (
+      'cred-demo-1', 
+      'cand-1', 
+      'comprehensive', 
+      'Background Check Certificate - Software Engineer',
+      ?,
+      datetime('now', '-5 days'),
+      datetime('now', '+365 days'),
+      'active',
+      'https://ameencheck.com/verify/cred-demo-1',
+      'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2ZmZiIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LXNpemU9IjE2IiBmaWxsPSIjMzMzIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+UVIgQ29kZTwvdGV4dD48L3N2Zz4=',
+      'demo1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0'
+    )`, [mainCredentialDetails]);
+
   // Create verifiable credentials for completed verifications
   const credentialDetails1 = JSON.stringify({
     verification_id: 'ver-completed-1',

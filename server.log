@@ -1,0 +1,34 @@
+
+> ameencheck-prototype@1.0.0 start
+> node server.js
+
+Database schema initialized
+Sample data inserted including completed verifications, warnings, and credentials
+
+╔═══════════════════════════════════════════════════════╗
+║                                                       ║
+║           🔒 AmeenCheck Platform Started 🔒          ║
+║                                                       ║
+║   AI-Powered Background Verification Platform        ║
+║                                                       ║
+╚═══════════════════════════════════════════════════════╝
+
+🌐 Server running at: http://localhost:3000
+
+📱 Access Points:
+   • Landing Page:      http://localhost:3000/
+   • Employer Portal:   http://localhost:3000/employer
+   • Candidate Portal:  http://localhost:3000/candidate
+   • Admin Panel:       http://localhost:3000/admin
+   • Login:             http://localhost:3000/login
+   • Register:          http://localhost:3000/register
+
+🔑 Demo Credentials:
+   Employer: hr@techsolutions.com / password123
+   Candidate: ahmed.ali@email.com / password123
+   Admin: admin@ameencheck.com / password123
+
+💡 Database initialized with sample data
+   
+✨ Ready to verify backgrounds in <24 hours!
+  
