@@ -77,9 +77,9 @@ router.post('/', authenticateToken, authorizeRole('employer'), (req, res) => {
   }
 
   const packagePrices = {
-    'basic': 29,
-    'standard': 49,
-    'comprehensive': 79
+    'basic': 20,
+    'standard': 50,
+    'comprehensive': 150
   };
 
   const price = packagePrices[packageType] || 49;

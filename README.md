@@ -7,7 +7,7 @@ A high-fidelity prototype of an AI-powered background verification platform that
 ### Employer Portal
 - **Dashboard**: Real-time statistics and metrics for all background checks
 - **Verification Management**: Create and track background check requests
-- **Package Selection**: Basic ($29), Standard ($49), and Comprehensive ($79) packages
+- **Package Selection**: Basic ($20), Standard ($50), and Comprehensive ($150) packages
 - **Status Tracking**: Monitor verification progress in real-time
 - **Detailed Reports**: View comprehensive verification results
 

@@ -13,7 +13,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-16">
         <div class="flex items-center space-x-8">
-          <span class="text-2xl font-bold gradient-text">🔒 AmeenCheck</span>
+          <img src="/images/logo-full.svg" alt="AmeenCheck" class="h-10">
           <div class="hidden md:flex space-x-4">
             <button onclick="showSection('dashboard')" class="nav-link active">Dashboard</button>
             <button onclick="showSection('credentials')" class="nav-link">My Credentials</button>
@@ -124,6 +124,199 @@
     </div>
   </div>
 
+  <!-- Toast Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Verification Form Modal -->
+  <div id="verificationFormModal" class="modal-overlay hidden">
+    <div class="modal-content max-w-4xl">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold">Complete Background Verification</h2>
+        <button onclick="closeVerificationModal()" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+      </div>
+
+      <!-- Progress Steps -->
+      <div class="flex justify-between mb-8">
+        <div class="flex-1 text-center">
+          <div class="step-indicator active" id="step1Indicator">
+            <div class="step-number">1</div>
+            <div class="step-label">Identity</div>
+          </div>
+        </div>
+        <div class="flex-1 text-center">
+          <div class="step-indicator" id="step2Indicator">
+            <div class="step-number">2</div>
+            <div class="step-label">Education</div>
+          </div>
+        </div>
+        <div class="flex-1 text-center">
+          <div class="step-indicator" id="step3Indicator">
+            <div class="step-number">3</div>
+            <div class="step-label">Employment</div>
+          </div>
+        </div>
+        <div class="flex-1 text-center">
+          <div class="step-indicator" id="step4Indicator">
+            <div class="step-number">4</div>
+            <div class="step-label">References</div>
+          </div>
+        </div>
+      </div>
+
+      <form id="verificationForm">
+        <!-- Step 1: Identity -->
+        <div class="form-step active" id="step1">
+          <h3 class="text-xl font-semibold mb-4">Identity Verification</h3>
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Nationality</label>
+              <input type="text" id="nationality" required class="w-full px-3 py-2 border border-gray-300 rounded-md">
+            </div>
+            <div class="grid md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">ID Type</label>
+                <select id="idType" required class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                  <option value="">Select type</option>
+                  <option value="passport">Passport</option>
+                  <option value="national_id">National ID</option>
+                  <option value="driver_license">Driver's License</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">ID Number</label>
+                <input type="text" id="idNumber" required class="w-full px-3 py-2 border border-gray-300 rounded-md">
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Upload ID Document *</label>
+              <input type="file" id="idDocument" accept="image/*,.pdf" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm">
+              <p class="text-xs text-gray-500 mt-1">📄 Accepted: JPG, PNG, PDF (Max 10MB)</p>
+            </div>
+            <div class="bg-blue-50 p-3 rounded-md">
+              <p class="text-xs text-gray-600">💡 In production: AI extracts data via OCR and verifies authenticity</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2: Education -->
+        <div class="form-step hidden" id="step2">
+          <h3 class="text-xl font-semibold mb-4">Education History</h3>
+          <div id="educationContainer" class="space-y-4">
+            <div class="education-entry border p-4 rounded-md">
+              <div class="grid md:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Institution</label>
+                  <input type="text" class="edu-institution w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Degree</label>
+                  <input type="text" class="edu-degree w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Field of Study</label>
+                  <input type="text" class="edu-field w-full px-3 py-2 border border-gray-300 rounded-md">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Graduation Year</label>
+                  <input type="number" class="edu-year w-full px-3 py-2 border border-gray-300 rounded-md" min="1950" max="2025">
+                </div>
+                <div class="md:col-span-2">
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Upload Diploma/Certificate</label>
+                  <input type="file" class="edu-doc w-full px-3 py-2 border border-gray-300 rounded-md text-sm" accept="image/*,.pdf">
+                </div>
+              </div>
+            </div>
+          </div>
+          <button type="button" onclick="addEducation()" class="btn-secondary mt-3">+ Add Another Degree</button>
+        </div>
+
+        <!-- Step 3: Employment -->
+        <div class="form-step hidden" id="step3">
+          <h3 class="text-xl font-semibold mb-4">Employment History</h3>
+          <div id="employmentContainer" class="space-y-4">
+            <div class="employment-entry border p-4 rounded-md">
+              <div class="grid md:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Company Name</label>
+                  <input type="text" class="emp-company w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Job Title</label>
+                  <input type="text" class="emp-title w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
+                  <input type="month" class="emp-start w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">End Date</label>
+                  <input type="month" class="emp-end w-full px-3 py-2 border border-gray-300 rounded-md">
+                  <label class="text-xs text-gray-500 mt-1"><input type="checkbox" class="emp-current"> Current</label>
+                </div>
+                <div class="md:col-span-2">
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Employment Letter (Optional)</label>
+                  <input type="file" class="emp-doc w-full px-3 py-2 border border-gray-300 rounded-md text-sm" accept="image/*,.pdf">
+                </div>
+              </div>
+            </div>
+          </div>
+          <button type="button" onclick="addEmployment()" class="btn-secondary mt-3">+ Add Another Position</button>
+        </div>
+
+        <!-- Step 4: References -->
+        <div class="form-step hidden" id="step4">
+          <h3 class="text-xl font-semibold mb-4">Professional References</h3>
+          <div id="referencesContainer" class="space-y-4">
+            <div class="reference-entry border p-4 rounded-md">
+              <div class="grid md:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Reference Name</label>
+                  <input type="text" class="ref-name w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Relationship</label>
+                  <select class="ref-relationship w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                    <option value="">Select</option>
+                    <option value="manager">Manager</option>
+                    <option value="colleague">Colleague</option>
+                    <option value="client">Client</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                  <input type="email" class="ref-email w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                  <input type="tel" class="ref-phone w-full px-3 py-2 border border-gray-300 rounded-md">
+                </div>
+              </div>
+            </div>
+          </div>
+          <button type="button" onclick="addReference()" class="btn-secondary mt-3">+ Add Another Reference</button>
+          <div class="bg-green-50 p-4 rounded-md mt-4">
+            <p class="text-sm text-gray-700">🤖 In production: AI voice agent would call references</p>
+            <p class="text-xs text-gray-500 mt-1">Auto-transcribe, sentiment analysis, structured data extraction</p>
+          </div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="flex justify-between mt-6 pt-6 border-t">
+          <button type="button" id="prevBtn" onclick="previousStep()" class="btn-secondary" style="display:none;">
+            ← Previous
+          </button>
+          <div></div>
+          <button type="button" id="nextBtn" onclick="nextStep()" class="btn-primary">
+            Next →
+          </button>
+          <button type="submit" id="submitBtn" class="btn-primary" style="display:none;">
+            Submit Verification
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script>
     let currentUser = null;
     let token = null;
@@ -175,6 +368,36 @@
       return data;
     }
 
+    // Toast notification system
+    function showToast(title, message, type = 'success') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      
+      const icons = {
+        success: '✅',
+        error: '❌',
+        info: 'ℹ️'
+      };
+      
+      toast.innerHTML = `
+        <div class="toast-icon">${icons[type] || icons.info}</div>
+        <div class="toast-content">
+          <div class="toast-title">${title}</div>
+          <div class="toast-message">${message}</div>
+        </div>
+        <button class="toast-close" onclick="this.parentElement.remove()">×</button>
+      `;
+      
+      container.appendChild(toast);
+      
+      // Auto remove after 5 seconds
+      setTimeout(() => {
+        toast.classList.add('removing');
+        setTimeout(() => toast.remove(), 300);
+      }, 5000);
+    }
+
     // Logout
     function logout() {
       localStorage.removeItem('token');
@@ -214,11 +437,303 @@
       }
     }
 
+    // Load verifications
+    async function loadVerifications() {
+      try {
+        const verifications = await apiCall('/api/verifications/candidate/my-verifications');
+        
+        document.getElementById('totalVerifications').textContent = verifications.length;
+        const completed = verifications.filter(v => v.status === 'completed').length;
+        document.getElementById('completedVerifications').textContent = completed;
+        
+        // Update banner visibility
+        const activeBanner = document.querySelector('.bg-blue-50');
+        const inProgress = verifications.find(v => v.status === 'in_progress' || v.status === 'invited');
+        
+        if (!inProgress) {
+          activeBanner.classList.add('hidden');
+        }
+        
+        // Render verifications list
+        const container = document.getElementById('verificationsContainer');
+        if (verifications.length === 0) {
+          container.innerHTML = `
+            <div class="text-center text-gray-500 py-8">
+              <div class="text-4xl mb-4">📋</div>
+              <p class="mb-2">No background checks yet</p>
+              <p class="text-sm">When an employer requests a background check, it will appear here.</p>
+            </div>
+          `;
+        } else {
+          container.innerHTML = verifications.map(v => `
+            <div class="border-b last:border-0 p-4 hover:bg-gray-50">
+              <div class="flex justify-between items-start">
+                <div class="flex-1">
+                  <h3 class="font-semibold text-lg">${v.employer_name}</h3>
+                  <p class="text-gray-600">Position: ${v.position || 'Not specified'}</p>
+                  <p class="text-sm text-gray-500 mt-1">Package: ${v.package_type}</p>
+                  <p class="text-sm text-gray-500">Initiated: ${new Date(v.initiated_date).toLocaleDateString()}</p>
+                </div>
+                <div>
+                  <span class="status-badge status-${v.status}">${formatStatus(v.status)}</span>
+                </div>
+              </div>
+              ${v.status === 'invited' ? `
+                <button onclick="startVerification('${v.id}')" class="btn-primary mt-3">
+                  Start Verification
+                </button>
+              ` : ''}
+            </div>
+          `).join('');
+        }
+      } catch (error) {
+        console.error('Error loading verifications:', error);
+      }
+    }
+
+    function formatStatus(status) {
+      const statusMap = {
+        'invited': 'Invited',
+        'in_progress': 'In Progress',
+        'completed': 'Completed',
+        'review_needed': 'Review Needed'
+      };
+      return statusMap[status] || status;
+    }
+
+    let currentStep = 1;
+    let currentVerificationId = null;
+
+    function startVerification(verificationId) {
+      currentVerificationId = verificationId;
+      document.getElementById('verificationFormModal').classList.remove('hidden');
+      currentStep = 1;
+      showStep(1);
+    }
+
+    function closeVerificationModal() {
+      document.getElementById('verificationFormModal').classList.add('hidden');
+      document.getElementById('verificationForm').reset();
+      currentStep = 1;
+      showStep(1);
+    }
+
+    function showStep(step) {
+      // Hide all steps
+      document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.step-indicator').forEach(s => s.classList.remove('active', 'completed'));
+      
+      // Show current step
+      document.getElementById(`step${step}`).classList.add('active');
+      document.getElementById(`step${step}Indicator`).classList.add('active');
+      
+      // Mark completed steps
+      for (let i = 1; i < step; i++) {
+        document.getElementById(`step${i}Indicator`).classList.add('completed');
+      }
+      
+      // Update buttons
+      document.getElementById('prevBtn').style.display = step === 1 ? 'none' : 'inline-block';
+      document.getElementById('nextBtn').style.display = step === 4 ? 'none' : 'inline-block';
+      document.getElementById('submitBtn').style.display = step === 4 ? 'inline-block' : 'none';
+    }
+
+    function nextStep() {
+      if (validateStep(currentStep)) {
+        currentStep++;
+        showStep(currentStep);
+      }
+    }
+
+    function previousStep() {
+      currentStep--;
+      showStep(currentStep);
+    }
+
+    function validateStep(step) {
+      const stepElement = document.getElementById(`step${step}`);
+      const inputs = stepElement.querySelectorAll('[required]');
+      
+      for (let input of inputs) {
+        if (!input.value.trim()) {
+          showToast('Validation Error', 'Please fill in all required fields', 'error');
+          input.focus();
+          return false;
+        }
+      }
+      return true;
+    }
+
+    function addEducation() {
+      const container = document.getElementById('educationContainer');
+      const entry = document.createElement('div');
+      entry.className = 'education-entry border p-4 rounded-md';
+      entry.innerHTML = `
+        <div class="grid md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Institution</label>
+            <input type="text" class="edu-institution w-full px-3 py-2 border border-gray-300 rounded-md" required>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Degree</label>
+            <input type="text" class="edu-degree w-full px-3 py-2 border border-gray-300 rounded-md" required>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Field of Study</label>
+            <input type="text" class="edu-field w-full px-3 py-2 border border-gray-300 rounded-md">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Graduation Year</label>
+            <input type="number" class="edu-year w-full px-3 py-2 border border-gray-300 rounded-md" min="1950" max="2025">
+          </div>
+        </div>
+        <button type="button" onclick="this.parentElement.remove()" class="text-red-600 text-sm mt-2">Remove</button>
+      `;
+      container.appendChild(entry);
+    }
+
+    function addEmployment() {
+      const container = document.getElementById('employmentContainer');
+      const entry = document.createElement('div');
+      entry.className = 'employment-entry border p-4 rounded-md';
+      entry.innerHTML = `
+        <div class="grid md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Company Name</label>
+            <input type="text" class="emp-company w-full px-3 py-2 border border-gray-300 rounded-md" required>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Job Title</label>
+            <input type="text" class="emp-title w-full px-3 py-2 border border-gray-300 rounded-md" required>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
+            <input type="month" class="emp-start w-full px-3 py-2 border border-gray-300 rounded-md" required>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">End Date</label>
+            <input type="month" class="emp-end w-full px-3 py-2 border border-gray-300 rounded-md">
+            <label class="text-xs text-gray-500 mt-1"><input type="checkbox" class="emp-current"> Current</label>
+          </div>
+        </div>
+        <button type="button" onclick="this.parentElement.remove()" class="text-red-600 text-sm mt-2">Remove</button>
+      `;
+      container.appendChild(entry);
+    }
+
+    function addReference() {
+      const container = document.getElementById('referencesContainer');
+      const entry = document.createElement('div');
+      entry.className = 'reference-entry border p-4 rounded-md';
+      entry.innerHTML = `
+        <div class="grid md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Reference Name</label>
+            <input type="text" class="ref-name w-full px-3 py-2 border border-gray-300 rounded-md" required>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Relationship</label>
+            <select class="ref-relationship w-full px-3 py-2 border border-gray-300 rounded-md" required>
+              <option value="">Select</option>
+              <option value="manager">Manager</option>
+              <option value="colleague">Colleague</option>
+              <option value="client">Client</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <input type="email" class="ref-email w-full px-3 py-2 border border-gray-300 rounded-md" required>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+            <input type="tel" class="ref-phone w-full px-3 py-2 border border-gray-300 rounded-md">
+          </div>
+        </div>
+        <button type="button" onclick="this.parentElement.remove()" class="text-red-600 text-sm mt-2">Remove</button>
+      `;
+      container.appendChild(entry);
+    }
+
+    // Form submission
+    document.getElementById('verificationForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      if (!validateStep(currentStep)) return;
+      
+      // Collect form data
+      const education = [];
+      document.querySelectorAll('.education-entry').forEach(entry => {
+        education.push({
+          institution: entry.querySelector('.edu-institution').value,
+          degree: entry.querySelector('.edu-degree').value,
+          fieldOfStudy: entry.querySelector('.edu-field').value,
+          year: entry.querySelector('.edu-year').value
+        });
+      });
+      
+      const employment = [];
+      document.querySelectorAll('.employment-entry').forEach(entry => {
+        employment.push({
+          companyName: entry.querySelector('.emp-company').value,
+          jobTitle: entry.querySelector('.emp-title').value,
+          startDate: entry.querySelector('.emp-start').value,
+          endDate: entry.querySelector('.emp-end').value
+        });
+      });
+      
+      const references = [];
+      document.querySelectorAll('.reference-entry').forEach(entry => {
+        references.push({
+          name: entry.querySelector('.ref-name').value,
+          relationship: entry.querySelector('.ref-relationship').value,
+          email: entry.querySelector('.ref-email').value,
+          phone: entry.querySelector('.ref-phone').value
+        });
+      });
+      
+      const formData = {
+        education,
+        employment,
+        references,
+        identityDocument: {
+          nationality: document.getElementById('nationality').value,
+          idType: document.getElementById('idType').value,
+          idNumber: document.getElementById('idNumber').value
+        }
+      };
+      
+      try {
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="loading"></span> Submitting...';
+        
+        await apiCall(`/api/verifications/${currentVerificationId}/submit`, {
+          method: 'POST',
+          body: JSON.stringify(formData)
+        });
+        
+        showToast(
+          'Verification Submitted Successfully!',
+          'Your information has been received and is being processed. You will receive updates as the verification progresses.',
+          'success'
+        );
+        
+        closeVerificationModal();
+        loadVerifications(); // Refresh the list
+        
+      } catch (error) {
+        console.error('Error submitting verification:', error);
+        showToast('Submission Failed', 'Failed to submit verification. Please try again.', 'error');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit Verification';
+      }
+    });
+
     // Initialize on page load
     document.addEventListener('DOMContentLoaded', () => {
       if (checkAuth()) {
         document.getElementById('userName').textContent = currentUser.name;
-        // Load dashboard data would go here
+        loadVerifications();
       }
     });
   </script>
