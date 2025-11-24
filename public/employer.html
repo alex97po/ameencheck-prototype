@@ -179,47 +179,73 @@
 
   <!-- Verification Details Modal -->
   <div id="verificationDetailsModal" class="modal-overlay hidden">
-    <div class="modal-content">
+    <div class="modal-content max-w-4xl">
       <div class="flex justify-between items-center mb-6">
-        <h2 class="text-2xl font-bold">Verification Details</h2>
+        <h2 class="text-2xl font-bold">Verification Report</h2>
         <button onclick="closeModal('verificationDetailsModal')" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
       </div>
 
-      <div class="space-y-4">
-        <div class="grid md:grid-cols-2 gap-4">
-          <div>
-            <div class="text-sm text-gray-600">Candidate</div>
-            <div class="font-medium" id="detailCandidateName">-</div>
+      <div class="space-y-6">
+        <!-- Summary Section -->
+        <div class="bg-gray-50 rounded-lg p-4">
+          <div class="grid md:grid-cols-2 gap-4">
+            <div>
+              <div class="text-sm text-gray-600">Candidate</div>
+              <div class="font-medium text-lg" id="detailCandidateName">-</div>
+            </div>
+            <div>
+              <div class="text-sm text-gray-600">Position</div>
+              <div class="font-medium text-lg" id="detailPosition">-</div>
+            </div>
           </div>
-          <div>
-            <div class="text-sm text-gray-600">Position</div>
-            <div class="font-medium" id="detailPosition">-</div>
+
+          <div class="grid md:grid-cols-4 gap-4 mt-4">
+            <div>
+              <div class="text-sm text-gray-600">Package</div>
+              <div class="font-medium" id="detailPackage">-</div>
+            </div>
+            <div>
+              <div class="text-sm text-gray-600">Status</div>
+              <div id="detailStatus">-</div>
+            </div>
+            <div>
+              <div class="text-sm text-gray-600">Initiated</div>
+              <div class="font-medium text-sm" id="detailInitiated">-</div>
+            </div>
+            <div>
+              <div class="text-sm text-gray-600">Completed</div>
+              <div class="font-medium text-sm" id="detailCompleted">-</div>
+            </div>
           </div>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-4">
-          <div>
-            <div class="text-sm text-gray-600">Package</div>
-            <div class="font-medium" id="detailPackage">-</div>
-          </div>
-          <div>
-            <div class="text-sm text-gray-600">Status</div>
-            <div id="detailStatus">-</div>
-          </div>
-          <div>
-            <div class="text-sm text-gray-600">Initiated</div>
-            <div class="font-medium" id="detailInitiated">-</div>
+        <!-- Warnings Alert -->
+        <div id="warningsAlert" class="hidden bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+          <div class="flex items-start">
+            <div class="flex-shrink-0">
+              <svg class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <div class="ml-3 flex-1">
+              <h3 class="text-sm font-medium text-yellow-800">Warnings Detected</h3>
+              <div class="mt-2 text-sm text-yellow-700" id="warningsSummary"></div>
+            </div>
           </div>
         </div>
 
+        <!-- Verification Items -->
         <div class="border-t pt-4">
-          <h3 class="font-semibold mb-3">Verification Items</h3>
-          <div id="verificationItems">
+          <h3 class="font-semibold text-lg mb-4">Verification Details</h3>
+          <div id="verificationItems" class="space-y-4">
             <!-- Dynamically populated -->
           </div>
         </div>
 
-        <div class="flex space-x-3 pt-4">
+        <div class="flex space-x-3 pt-4 border-t">
+          <button onclick="downloadReport()" class="btn-primary">
+            Download Report
+          </button>
           <button onclick="closeModal('verificationDetailsModal')" class="flex-1 btn-secondary">
             Close
           </button>
