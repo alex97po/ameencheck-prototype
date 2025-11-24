@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employer Portal - AmeenCheck</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body class="bg-gray-50">
+  <!-- Navigation -->
+  <nav class="bg-white shadow-sm sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex items-center space-x-8">
+          <span class="text-2xl font-bold gradient-text">🔒 AmeenCheck</span>
+          <div class="hidden md:flex space-x-4">
+            <button onclick="showSection('dashboard')" class="nav-link active">Dashboard</button>
+            <button onclick="showSection('verifications')" class="nav-link">Verifications</button>
+          </div>
+        </div>
+        <div class="flex items-center space-x-4">
+          <div class="text-right hidden md:block">
+            <div class="font-medium text-gray-900" id="userName">Loading...</div>
+            <div class="text-sm text-gray-500" id="companyName">Loading...</div>
+          </div>
+          <button onclick="logout()" class="text-gray-700 hover:text-red-600 font-medium">Logout</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Dashboard Section -->
+    <div id="dashboard" class="content-section">
+      <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-900">Dashboard</h1>
+        <button onclick="openNewVerificationModal()" class="btn-primary">
+          + New Background Check
+        </button>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="grid md:grid-cols-4 gap-6 mb-8">
+        <div class="stat-card">
+          <div class="text-sm text-gray-600 mb-1">Total Verifications</div>
+          <div class="text-3xl font-bold text-gray-900" id="totalVerifications">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="text-sm text-gray-600 mb-1">In Progress</div>
+          <div class="text-3xl font-bold text-blue-600" id="pendingVerifications">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="text-sm text-gray-600 mb-1">Completed This Month</div>
+          <div class="text-3xl font-bold text-green-600" id="completedThisMonth">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="text-sm text-gray-600 mb-1">Avg. Completion Time</div>
+          <div class="text-2xl font-bold text-gray-900" id="avgCompletionTime">--</div>
+        </div>
+      </div>
+
+      <!-- Recent Verifications -->
+      <div class="bg-white rounded-lg shadow">
+        <div class="px-6 py-4 border-b">
+          <h2 class="text-xl font-semibold">Recent Background Checks</h2>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Candidate</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Position</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Package</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="verificationsTable" class="bg-white divide-y divide-gray-200">
+              <tr>
+                <td colspan="6" class="px-6 py-4 text-center text-gray-500">
+                  <span class="loading"></span> Loading...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Verifications Section -->
+    <div id="verifications" class="content-section hidden">
+      <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-900">All Verifications</h1>
+        <button onclick="openNewVerificationModal()" class="btn-primary">
+          + New Background Check
+        </button>
+      </div>
+
+      <div class="bg-white rounded-lg shadow">
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Candidate</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Position</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Package</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="verificationsTable" class="bg-white divide-y divide-gray-200">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- New Verification Modal -->
+  <div id="newVerificationModal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold">New Background Check</h2>
+        <button onclick="closeModal('newVerificationModal')" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+      </div>
+
+      <form id="newVerificationForm" onsubmit="submitNewVerification(event)" class="space-y-4">
+        <div class="grid md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Candidate Name *</label>
+            <input type="text" id="candidateName" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Candidate Email *</label>
+            <input type="email" id="candidateEmail" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Candidate Phone</label>
+            <input type="tel" id="candidatePhone" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Position *</label>
+            <input type="text" id="position" required placeholder="e.g., Senior Engineer" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Verification Package *</label>
+          <select id="packageType" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+            <option value="">Select package</option>
+            <option value="basic">Basic - $29 (Identity, Education, Employment)</option>
+            <option value="standard">Standard - $49 (+ Criminal Check, References)</option>
+            <option value="comprehensive">Comprehensive - $79 (+ Multi-country, Extended History)</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Special Instructions</label>
+          <textarea id="specialInstructions" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" placeholder="Any specific requirements or notes..."></textarea>
+        </div>
+
+        <div class="flex space-x-3 pt-4">
+          <button type="submit" id="submitVerificationBtn" class="flex-1 btn-primary">
+            Create Background Check
+          </button>
+          <button type="button" onclick="closeModal('newVerificationModal')" class="flex-1 btn-secondary">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Verification Details Modal -->
+  <div id="verificationDetailsModal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold">Verification Details</h2>
+        <button onclick="closeModal('verificationDetailsModal')" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+      </div>
+
+      <div class="space-y-4">
+        <div class="grid md:grid-cols-2 gap-4">
+          <div>
+            <div class="text-sm text-gray-600">Candidate</div>
+            <div class="font-medium" id="detailCandidateName">-</div>
+          </div>
+          <div>
+            <div class="text-sm text-gray-600">Position</div>
+            <div class="font-medium" id="detailPosition">-</div>
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-4">
+          <div>
+            <div class="text-sm text-gray-600">Package</div>
+            <div class="font-medium" id="detailPackage">-</div>
+          </div>
+          <div>
+            <div class="text-sm text-gray-600">Status</div>
+            <div id="detailStatus">-</div>
+          </div>
+          <div>
+            <div class="text-sm text-gray-600">Initiated</div>
+            <div class="font-medium" id="detailInitiated">-</div>
+          </div>
+        </div>
+
+        <div class="border-t pt-4">
+          <h3 class="font-semibold mb-3">Verification Items</h3>
+          <div id="verificationItems">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <div class="flex space-x-3 pt-4">
+          <button onclick="closeModal('verificationDetailsModal')" class="flex-1 btn-secondary">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/employer.js"></script>
+</body>
+</html>

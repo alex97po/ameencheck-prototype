@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - AmeenCheck</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body class="bg-gray-50">
+  <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+      <div>
+        <h2 class="text-center text-3xl font-bold gradient-text">🔒 AmeenCheck</h2>
+        <p class="mt-2 text-center text-gray-600">Sign in to your account</p>
+      </div>
+      
+      <div class="bg-white rounded-lg shadow-md p-8">
+        <form id="loginForm" class="space-y-6">
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+            <input type="email" id="email" required 
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+          </div>
+
+          <div>
+            <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+            <input type="password" id="password" required 
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+          </div>
+
+          <div class="flex items-center justify-between">
+            <div class="flex items-center">
+              <input type="checkbox" id="remember" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+              <label for="remember" class="ml-2 block text-sm text-gray-700">Remember me</label>
+            </div>
+            <div class="text-sm">
+              <a href="#" class="text-blue-600 hover:text-blue-500">Forgot password?</a>
+            </div>
+          </div>
+
+          <div id="errorMessage" class="hidden bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded"></div>
+
+          <button type="submit" id="loginBtn" class="w-full btn-primary">
+            Sign in
+          </button>
+        </form>
+
+        <div class="mt-6 text-center">
+          <p class="text-sm text-gray-600">
+            Don't have an account? 
+            <a href="/register" class="text-blue-600 hover:text-blue-500 font-medium">Sign up</a>
+          </p>
+        </div>
+
+        <div class="mt-6 border-t pt-6">
+          <p class="text-xs text-gray-500 mb-2">Demo credentials:</p>
+          <div class="space-y-1 text-xs text-gray-600">
+            <div>Employer: hr@techsolutions.com / password123</div>
+            <div>Candidate: ahmed.ali@email.com / password123</div>
+            <div>Admin: admin@ameencheck.com / password123</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center">
+        <a href="/" class="text-sm text-gray-600 hover:text-blue-600">← Back to home</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const errorMessage = document.getElementById('errorMessage');
+      const loginBtn = document.getElementById('loginBtn');
+      
+      loginBtn.disabled = true;
+      loginBtn.innerHTML = '<span class="loading"></span> Signing in...';
+      errorMessage.classList.add('hidden');
+
+      try {
+        const response = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          // Store token and user info
+          localStorage.setItem('token', data.token);
+          localStorage.setItem('user', JSON.stringify(data.user));
+
+          // Redirect based on role
+          switch(data.user.role) {
+            case 'employer':
+              window.location.href = '/employer';
+              break;
+            case 'candidate':
+              window.location.href = '/candidate';
+              break;
+            case 'admin':
+              window.location.href = '/admin';
+              break;
+            default:
+              window.location.href = '/';
+          }
+        } else {
+          errorMessage.textContent = data.error || 'Login failed';
+          errorMessage.classList.remove('hidden');
+          loginBtn.disabled = false;
+          loginBtn.textContent = 'Sign in';
+        }
+      } catch (error) {
+        console.error('Login error:', error);
+        errorMessage.textContent = 'An error occurred. Please try again.';
+        errorMessage.classList.remove('hidden');
+        loginBtn.disabled = false;
+        loginBtn.textContent = 'Sign in';
+      }
+    });
+  </script>
+</body>
+</html>

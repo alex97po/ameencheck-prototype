@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - AmeenCheck</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body class="bg-gray-50">
+  <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-2xl w-full space-y-8">
+      <div>
+        <h2 class="text-center text-3xl font-bold gradient-text">🔒 AmeenCheck</h2>
+        <p class="mt-2 text-center text-gray-600">Create your account</p>
+      </div>
+      
+      <!-- Role Selection -->
+      <div class="bg-white rounded-lg shadow-md p-8" id="roleSelection">
+        <h3 class="text-xl font-semibold mb-4">I am a...</h3>
+        <div class="grid md:grid-cols-2 gap-4">
+          <button onclick="selectRole('employer')" class="p-6 border-2 border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition text-left">
+            <div class="text-3xl mb-2">🏢</div>
+            <h4 class="font-semibold text-lg">Employer</h4>
+            <p class="text-sm text-gray-600">Request background checks for candidates</p>
+          </button>
+          <button onclick="selectRole('candidate')" class="p-6 border-2 border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition text-left">
+            <div class="text-3xl mb-2">👤</div>
+            <h4 class="font-semibold text-lg">Candidate</h4>
+            <p class="text-sm text-gray-600">Manage your background verification</p>
+          </button>
+        </div>
+      </div>
+
+      <!-- Employer Registration Form -->
+      <div class="bg-white rounded-lg shadow-md p-8 hidden" id="employerForm">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-semibold">Employer Registration</h3>
+          <button onclick="backToRoleSelection()" class="text-sm text-gray-600 hover:text-blue-600">← Change</button>
+        </div>
+        <form id="registerEmployerForm" class="space-y-4">
+          <div class="grid md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Full Name *</label>
+              <input type="text" id="empName" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Email *</label>
+              <input type="email" id="empEmail" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+            </div>
+          </div>
+          <div class="grid md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Password *</label>
+              <input type="password" id="empPassword" required minlength="6" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Phone</label>
+              <input type="tel" id="empPhone" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+            </div>
+          </div>
+          <div class="grid md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Company Name *</label>
+              <input type="text" id="empCompanyName" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Company Size</label>
+              <select id="empCompanySize" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                <option value="">Select size</option>
+                <option value="1-10">1-10 employees</option>
+                <option value="10-50">10-50 employees</option>
+                <option value="50-100">50-100 employees</option>
+                <option value="100-500">100-500 employees</option>
+                <option value="500+">500+ employees</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Industry</label>
+              <input type="text" id="empIndustry" placeholder="e.g., Technology" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Location</label>
+              <input type="text" id="empLocation" placeholder="e.g., Dubai, UAE" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Language</label>
+            <select id="empLanguage" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+              <option value="en">English</option>
+              <option value="ar">العربية (Arabic)</option>
+            </select>
+          </div>
+          <div class="flex items-start">
+            <input type="checkbox" id="empTerms" required class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mt-1">
+            <label for="empTerms" class="ml-2 block text-sm text-gray-700">
+              I agree to the <a href="#" class="text-blue-600 hover:text-blue-500">Terms of Service</a> and <a href="#" class="text-blue-600 hover:text-blue-500">Privacy Policy</a>
+            </label>
+          </div>
+          <div id="empErrorMessage" class="hidden bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded"></div>
+          <button type="submit" id="empRegisterBtn" class="w-full btn-primary">
+            Create Account
+          </button>
+        </form>
+      </div>
+
+      <!-- Candidate Registration Form -->
+      <div class="bg-white rounded-lg shadow-md p-8 hidden" id="candidateForm">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-semibold">Candidate Registration</h3>
+          <button onclick="backToRoleSelection()" class="text-sm text-gray-600 hover:text-blue-600">← Change</button>
+        </div>
+        <form id="registerCandidateForm" class="space-y-4">
+          <div class="grid md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Full Name *</label>
+              <input type="text" id="candName" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Email *</label>
+              <input type="email" id="candEmail" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+            </div>
+          </div>
+          <div class="grid md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Password *</label>
+              <input type="password" id="candPassword" required minlength="6" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Phone</label>
+              <input type="tel" id="candPhone" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Language</label>
+            <select id="candLanguage" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+              <option value="en">English</option>
+              <option value="ar">العربية (Arabic)</option>
+            </select>
+          </div>
+          <div class="flex items-start">
+            <input type="checkbox" id="candTerms" required class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mt-1">
+            <label for="candTerms" class="ml-2 block text-sm text-gray-700">
+              I agree to the <a href="#" class="text-blue-600 hover:text-blue-500">Terms of Service</a> and <a href="#" class="text-blue-600 hover:text-blue-500">Privacy Policy</a>
+            </label>
+          </div>
+          <div id="candErrorMessage" class="hidden bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded"></div>
+          <button type="submit" id="candRegisterBtn" class="w-full btn-primary">
+            Create Account
+          </button>
+        </form>
+      </div>
+
+      <div class="text-center">
+        <p class="text-sm text-gray-600">
+          Already have an account? 
+          <a href="/login" class="text-blue-600 hover:text-blue-500 font-medium">Sign in</a>
+        </p>
+      </div>
+
+      <div class="text-center">
+        <a href="/" class="text-sm text-gray-600 hover:text-blue-600">← Back to home</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Check for role in URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const roleParam = urlParams.get('type');
+    if (roleParam) {
+      selectRole(roleParam);
+    }
+
+    function selectRole(role) {
+      document.getElementById('roleSelection').classList.add('hidden');
+      if (role === 'employer') {
+        document.getElementById('employerForm').classList.remove('hidden');
+      } else {
+        document.getElementById('candidateForm').classList.remove('hidden');
+      }
+    }
+
+    function backToRoleSelection() {
+      document.getElementById('roleSelection').classList.remove('hidden');
+      document.getElementById('employerForm').classList.add('hidden');
+      document.getElementById('candidateForm').classList.add('hidden');
+    }
+
+    // Employer registration
+    document.getElementById('registerEmployerForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const formData = {
+        email: document.getElementById('empEmail').value,
+        password: document.getElementById('empPassword').value,
+        name: document.getElementById('empName').value,
+        phone: document.getElementById('empPhone').value,
+        companyName: document.getElementById('empCompanyName').value,
+        companySize: document.getElementById('empCompanySize').value,
+        industry: document.getElementById('empIndustry').value,
+        location: document.getElementById('empLocation').value,
+        language: document.getElementById('empLanguage').value
+      };
+
+      const errorMessage = document.getElementById('empErrorMessage');
+      const registerBtn = document.getElementById('empRegisterBtn');
+      
+      registerBtn.disabled = true;
+      registerBtn.innerHTML = '<span class="loading"></span> Creating account...';
+      errorMessage.classList.add('hidden');
+
+      try {
+        const response = await fetch('/api/auth/register/employer', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          localStorage.setItem('token', data.token);
+          localStorage.setItem('user', JSON.stringify(data.user));
+          window.location.href = '/employer';
+        } else {
+          errorMessage.textContent = data.error || 'Registration failed';
+          errorMessage.classList.remove('hidden');
+          registerBtn.disabled = false;
+          registerBtn.textContent = 'Create Account';
+        }
+      } catch (error) {
+        console.error('Registration error:', error);
+        errorMessage.textContent = 'An error occurred. Please try again.';
+        errorMessage.classList.remove('hidden');
+        registerBtn.disabled = false;
+        registerBtn.textContent = 'Create Account';
+      }
+    });
+
+    // Candidate registration
+    document.getElementById('registerCandidateForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const formData = {
+        email: document.getElementById('candEmail').value,
+        password: document.getElementById('candPassword').value,
+        name: document.getElementById('candName').value,
+        phone: document.getElementById('candPhone').value,
+        language: document.getElementById('candLanguage').value
+      };
+
+      const errorMessage = document.getElementById('candErrorMessage');
+      const registerBtn = document.getElementById('candRegisterBtn');
+      
+      registerBtn.disabled = true;
+      registerBtn.innerHTML = '<span class="loading"></span> Creating account...';
+      errorMessage.classList.add('hidden');
+
+      try {
+        const response = await fetch('/api/auth/register/candidate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          localStorage.setItem('token', data.token);
+          localStorage.setItem('user', JSON.stringify(data.user));
+          window.location.href = '/candidate';
+        } else {
+          errorMessage.textContent = data.error || 'Registration failed';
+          errorMessage.classList.remove('hidden');
+          registerBtn.disabled = false;
+          registerBtn.textContent = 'Create Account';
+        }
+      } catch (error) {
+        console.error('Registration error:', error);
+        errorMessage.textContent = 'An error occurred. Please try again.';
+        errorMessage.classList.remove('hidden');
+        registerBtn.disabled = false;
+        registerBtn.textContent = 'Create Account';
+      }
+    });
+  </script>
+</body>
+</html>

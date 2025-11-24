@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AmeenCheck - AI-Powered Background Verification</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body class="bg-gray-50">
+  <!-- Navigation -->
+  <nav class="bg-white shadow-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex items-center">
+          <span class="text-2xl font-bold gradient-text">🔒 AmeenCheck</span>
+        </div>
+        <div class="flex items-center space-x-4">
+          <button onclick="toggleLanguage()" class="text-gray-600 hover:text-primary">
+            <span id="langToggle">العربية</span>
+          </button>
+          <a href="/login" class="text-gray-700 hover:text-primary font-medium">Login</a>
+          <a href="/register" class="btn-primary">Get Started</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="gradient-bg text-white py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center fade-in">
+        <h1 class="text-5xl font-bold mb-6">
+          Background Verification in <span class="text-yellow-300">&lt;24 Hours</span>
+        </h1>
+        <p class="text-xl mb-8 text-blue-100">
+          AI-powered verification platform that reduces turnaround time from weeks to hours,
+          <br>with reusable digital credentials for candidates.
+        </p>
+        <div class="flex justify-center space-x-4">
+          <a href="/register?type=employer" class="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold hover:bg-blue-50 transition">
+            For Employers
+          </a>
+          <a href="/register?type=candidate" class="bg-transparent border-2 border-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition">
+            For Candidates
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold text-center mb-12">Why Choose AmeenCheck?</h2>
+      <div class="grid md:grid-cols-3 gap-8">
+        <!-- Feature 1 -->
+        <div class="stat-card card-hover text-center">
+          <div class="text-4xl mb-4">⚡</div>
+          <h3 class="text-xl font-semibold mb-2">Lightning Fast</h3>
+          <p class="text-gray-600">Complete background checks in less than 24 hours with AI-powered automation</p>
+        </div>
+        
+        <!-- Feature 2 -->
+        <div class="stat-card card-hover text-center">
+          <div class="text-4xl mb-4">🤖</div>
+          <h3 class="text-xl font-semibold mb-2">AI-Powered</h3>
+          <p class="text-gray-600">Advanced OCR, voice agents, and document verification with 90%+ accuracy</p>
+        </div>
+        
+        <!-- Feature 3 -->
+        <div class="stat-card card-hover text-center">
+          <div class="text-4xl mb-4">🎫</div>
+          <h3 class="text-xl font-semibold mb-2">Digital Credentials</h3>
+          <p class="text-gray-600">Candidates receive reusable, blockchain-verified credentials they can share</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Verification Packages -->
+  <section class="bg-gray-100 py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold text-center mb-12">Verification Packages</h2>
+      <div class="grid md:grid-cols-3 gap-8">
+        <!-- Basic -->
+        <div class="bg-white rounded-xl p-8 shadow-md">
+          <h3 class="text-2xl font-bold mb-2">Basic</h3>
+          <p class="text-4xl font-bold text-blue-600 mb-6">$29</p>
+          <ul class="space-y-3 mb-8">
+            <li class="flex items-start">
+              <span class="text-green-500 mr-2">✓</span>
+              <span>Identity Verification</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-green-500 mr-2">✓</span>
+              <span>Education Verification (1 degree)</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-green-500 mr-2">✓</span>
+              <span>Employment History (last 2 positions)</span>
+            </li>
+          </ul>
+          <button class="w-full btn-secondary">Choose Basic</button>
+        </div>
+
+        <!-- Standard -->
+        <div class="bg-white rounded-xl p-8 shadow-xl border-4 border-blue-500 relative">
+          <div class="absolute top-0 right-0 bg-blue-500 text-white px-4 py-1 rounded-bl-lg text-sm font-semibold">
+            Popular
+          </div>
+          <h3 class="text-2xl font-bold mb-2">Standard</h3>
+          <p class="text-4xl font-bold text-blue-600 mb-6">$49</p>
+          <ul class="space-y-3 mb-8">
+            <li class="flex items-start">
+              <span class="text-green-500 mr-2">✓</span>
+              <span>Everything in Basic</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-green-500 mr-2">✓</span>
+              <span>Criminal Record Check (1 country)</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-green-500 mr-2">✓</span>
+              <span>2 Professional References</span>
+            </li>
+          </ul>
+          <button class="w-full btn-primary">Choose Standard</button>
+        </div>
+
+        <!-- Comprehensive -->
+        <div class="bg-white rounded-xl p-8 shadow-md">
+          <h3 class="text-2xl font-bold mb-2">Comprehensive</h3>
+          <p class="text-4xl font-bold text-blue-600 mb-6">$79</p>
+          <ul class="space-y-3 mb-8">
+            <li class="flex items-start">
+              <span class="text-green-500 mr-2">✓</span>
+              <span>Everything in Standard</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-green-500 mr-2">✓</span>
+              <span>Multi-Country Criminal Checks (3)</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-green-500 mr-2">✓</span>
+              <span>Extended Employment (5 positions)</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-green-500 mr-2">✓</span>
+              <span>Professional License Verification</span>
+            </li>
+          </ul>
+          <button class="w-full btn-secondary">Choose Comprehensive</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold text-center mb-12">How It Works</h2>
+      <div class="grid md:grid-cols-4 gap-8">
+        <div class="text-center">
+          <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold text-blue-600">1</div>
+          <h3 class="font-semibold mb-2">Request Check</h3>
+          <p class="text-gray-600 text-sm">Employer initiates background check for candidate</p>
+        </div>
+        <div class="text-center">
+          <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold text-blue-600">2</div>
+          <h3 class="font-semibold mb-2">Candidate Submits</h3>
+          <p class="text-gray-600 text-sm">Candidate uploads documents and information</p>
+        </div>
+        <div class="text-center">
+          <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold text-blue-600">3</div>
+          <h3 class="font-semibold mb-2">AI Verification</h3>
+          <p class="text-gray-600 text-sm">AI agents verify documents and contact references</p>
+        </div>
+        <div class="text-center">
+          <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold text-blue-600">4</div>
+          <h3 class="font-semibold mb-2">Results & Credentials</h3>
+          <p class="text-gray-600 text-sm">Report delivered, digital credentials issued</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="gradient-bg text-white py-16">
+    <div class="max-w-4xl mx-auto text-center px-4">
+      <h2 class="text-3xl font-bold mb-4">Ready to Streamline Your Hiring?</h2>
+      <p class="text-xl mb-8">Join hundreds of companies verifying backgrounds in record time</p>
+      <a href="/register" class="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold hover:bg-blue-50 transition inline-block">
+        Start Free Trial
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid md:grid-cols-4 gap-8">
+        <div>
+          <h4 class="text-xl font-bold mb-4">🔒 AmeenCheck</h4>
+          <p class="text-gray-400">AI-powered background verification for the modern workforce</p>
+        </div>
+        <div>
+          <h5 class="font-semibold mb-4">Product</h5>
+          <ul class="space-y-2 text-gray-400">
+            <li><a href="#" class="hover:text-white">Features</a></li>
+            <li><a href="#" class="hover:text-white">Pricing</a></li>
+            <li><a href="#" class="hover:text-white">API Docs</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5 class="font-semibold mb-4">Company</h5>
+          <ul class="space-y-2 text-gray-400">
+            <li><a href="#" class="hover:text-white">About Us</a></li>
+            <li><a href="#" class="hover:text-white">Careers</a></li>
+            <li><a href="#" class="hover:text-white">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5 class="font-semibold mb-4">Legal</h5>
+          <ul class="space-y-2 text-gray-400">
+            <li><a href="#" class="hover:text-white">Privacy Policy</a></li>
+            <li><a href="#" class="hover:text-white">Terms of Service</a></li>
+            <li><a href="#" class="hover:text-white">Compliance</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+        <p>&copy; 2025 AmeenCheck. All rights reserved. Built for MENA market.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function toggleLanguage() {
+      const langToggle = document.getElementById('langToggle');
+      if (langToggle.textContent === 'العربية') {
+        langToggle.textContent = 'English';
+        // Here you would implement full RTL and translation
+        alert('Arabic language support - Feature in development');
+      } else {
+        langToggle.textContent = 'العربية';
+      }
+    }
+  </script>
+</body>
+</html>

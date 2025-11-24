@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - AmeenCheck</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body class="bg-gray-50">
+  <!-- Navigation -->
+  <nav class="bg-white shadow-sm sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex items-center space-x-8">
+          <span class="text-2xl font-bold gradient-text">🔒 AmeenCheck Admin</span>
+          <div class="hidden md:flex space-x-4">
+            <button onclick="showSection('analytics')" class="nav-link active">Analytics</button>
+            <button onclick="showSection('verifications')" class="nav-link">Verifications</button>
+            <button onclick="showSection('review-queue')" class="nav-link">Review Queue</button>
+          </div>
+        </div>
+        <div class="flex items-center space-x-4">
+          <div class="text-right hidden md:block">
+            <div class="font-medium text-gray-900" id="userName">Admin</div>
+            <div class="text-sm text-gray-500">Administrator</div>
+          </div>
+          <button onclick="logout()" class="text-gray-700 hover:text-red-600 font-medium">Logout</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Analytics Section -->
+    <div id="analytics" class="content-section">
+      <h1 class="text-3xl font-bold text-gray-900 mb-8">Platform Analytics</h1>
+
+      <!-- Stats Grid -->
+      <div class="grid md:grid-cols-4 gap-6 mb-8">
+        <div class="stat-card">
+          <div class="text-sm text-gray-600 mb-1">Total Verifications</div>
+          <div class="text-3xl font-bold text-gray-900" id="totalVerifications">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="text-sm text-gray-600 mb-1">Total Employers</div>
+          <div class="text-3xl font-bold text-blue-600" id="totalEmployers">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="text-sm text-gray-600 mb-1">Total Candidates</div>
+          <div class="text-3xl font-bold text-green-600" id="totalCandidates">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="text-sm text-gray-600 mb-1">Active Credentials</div>
+          <div class="text-3xl font-bold text-purple-600" id="activeCredentials">0</div>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6 mb-8">
+        <div class="stat-card">
+          <div class="text-sm text-gray-600 mb-1">Pending Reviews</div>
+          <div class="text-3xl font-bold text-orange-600" id="pendingReviews">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="text-sm text-gray-600 mb-1">Avg. Completion Time</div>
+          <div class="text-2xl font-bold text-gray-900" id="avgCompletionTime">--</div>
+        </div>
+      </div>
+
+      <!-- Verification Status Breakdown -->
+      <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-xl font-semibold mb-4">Verification Status Breakdown</h2>
+        <div id="statusBreakdown" class="space-y-3">
+          <div class="text-sm text-gray-500">Loading...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Verifications Section -->
+    <div id="verifications" class="content-section hidden">
+      <h1 class="text-3xl font-bold text-gray-900 mb-8">All Verifications</h1>
+
+      <div class="bg-white rounded-lg shadow">
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Candidate</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Employer</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="allVerificationsTable" class="bg-white divide-y divide-gray-200">
+              <tr>
+                <td colspan="6" class="px-6 py-4 text-center text-gray-500">Loading...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Review Queue Section -->
+    <div id="review-queue" class="content-section hidden">
+      <h1 class="text-3xl font-bold text-gray-900 mb-8">Manual Review Queue</h1>
+
+      <div class="bg-white rounded-lg shadow">
+        <div class="px-6 py-4 border-b">
+          <h2 class="text-xl font-semibold">Pending Review Items</h2>
+        </div>
+        <div id="reviewQueueContainer" class="p-6">
+          <div class="text-center text-gray-500 py-8">
+            <div class="text-4xl mb-4">✅</div>
+            <p class="mb-2">No items pending review</p>
+            <p class="text-sm">All verifications are processing normally</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentUser = null;
+    let token = null;
+
+    // Check authentication
+    function checkAuth() {
+      token = localStorage.getItem('token');
+      const userStr = localStorage.getItem('user');
+      
+      if (!token || !userStr) {
+        window.location.href = '/login';
+        return false;
+      }
+      
+      currentUser = JSON.parse(userStr);
+      
+      if (currentUser.role !== 'admin') {
+        alert('Access denied. Admin account required.');
+        window.location.href = '/login';
+        return false;
+      }
+      
+      return true;
+    }
+
+    // API helper
+    async function apiCall(endpoint, options = {}) {
+      const defaultOptions = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      };
+      
+      const response = await fetch(endpoint, { ...defaultOptions, ...options });
+      const data = await response.json();
+      
+      if (response.status === 401 || response.status === 403) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        window.location.href = '/login';
+        throw new Error('Unauthorized');
+      }
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'API request failed');
+      }
+      
+      return data;
+    }
+
+    // Logout
+    function logout() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = '/login';
+    }
+
+    // Show section
+    function showSection(sectionId) {
+      document.querySelectorAll('.content-section').forEach(section => {
+        section.classList.add('hidden');
+      });
+      document.getElementById(sectionId).classList.remove('hidden');
+      
+      document.querySelectorAll('.nav-link').forEach(link => {
+        link.classList.remove('active');
+      });
+      document.querySelector(`[onclick="showSection('${sectionId}')"]`)?.classList.add('active');
+      
+      if (sectionId === 'analytics') {
+        loadAnalytics();
+      }
+    }
+
+    // Load analytics
+    async function loadAnalytics() {
+      try {
+        const data = await apiCall('/api/admin/analytics');
+        
+        document.getElementById('totalVerifications').textContent = data.totalVerifications || 0;
+        document.getElementById('totalEmployers').textContent = data.totalEmployers || 0;
+        document.getElementById('totalCandidates').textContent = data.totalCandidates || 0;
+        document.getElementById('activeCredentials').textContent = data.activeCredentials || 0;
+        document.getElementById('pendingReviews').textContent = data.pendingReviews || 0;
+        document.getElementById('avgCompletionTime').textContent = data.avgCompletionTime || 'N/A';
+        
+        // Render status breakdown
+        const statusContainer = document.getElementById('statusBreakdown');
+        if (data.verificationsByStatus && data.verificationsByStatus.length > 0) {
+          statusContainer.innerHTML = data.verificationsByStatus.map(item => `
+            <div class="flex justify-between items-center">
+              <span class="text-gray-700">${formatStatus(item.status)}</span>
+              <span class="font-semibold">${item.count}</span>
+            </div>
+          `).join('');
+        } else {
+          statusContainer.innerHTML = '<div class="text-sm text-gray-500">No verifications yet</div>';
+        }
+      } catch (error) {
+        console.error('Error loading analytics:', error);
+      }
+    }
+
+    function formatStatus(status) {
+      const statusMap = {
+        'invited': 'Invited',
+        'in_progress': 'In Progress',
+        'completed': 'Completed',
+        'review_needed': 'Review Needed'
+      };
+      return statusMap[status] || status;
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      if (checkAuth()) {
+        document.getElementById('userName').textContent = currentUser.name;
+        loadAnalytics();
+      }
+    });
+  </script>
+</body>
+</html>

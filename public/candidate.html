@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Candidate Portal - AmeenCheck</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body class="bg-gray-50">
+  <!-- Navigation -->
+  <nav class="bg-white shadow-sm sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex items-center space-x-8">
+          <span class="text-2xl font-bold gradient-text">🔒 AmeenCheck</span>
+          <div class="hidden md:flex space-x-4">
+            <button onclick="showSection('dashboard')" class="nav-link active">Dashboard</button>
+            <button onclick="showSection('credentials')" class="nav-link">My Credentials</button>
+          </div>
+        </div>
+        <div class="flex items-center space-x-4">
+          <div class="text-right hidden md:block">
+            <div class="font-medium text-gray-900" id="userName">Loading...</div>
+            <div class="text-sm text-gray-500">Candidate</div>
+          </div>
+          <button onclick="logout()" class="text-gray-700 hover:text-red-600 font-medium">Logout</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Dashboard Section -->
+    <div id="dashboard" class="content-section">
+      <h1 class="text-3xl font-bold text-gray-900 mb-8">My Verifications</h1>
+
+      <!-- Verification Status Banner -->
+      <div class="bg-blue-50 border-l-4 border-blue-500 p-6 mb-8 rounded-lg">
+        <div class="flex items-center">
+          <div class="flex-1">
+            <h3 class="text-lg font-semibold text-blue-900 mb-1">Active Verification in Progress</h3>
+            <p class="text-blue-700">Complete your information to help expedite the process</p>
+          </div>
+          <button class="btn-primary">Continue</button>
+        </div>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="grid md:grid-cols-3 gap-6 mb-8">
+        <div class="stat-card">
+          <div class="text-sm text-gray-600 mb-1">Total Verifications</div>
+          <div class="text-3xl font-bold text-gray-900" id="totalVerifications">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="text-sm text-gray-600 mb-1">Completed</div>
+          <div class="text-3xl font-bold text-green-600" id="completedVerifications">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="text-sm text-gray-600 mb-1">Credentials Issued</div>
+          <div class="text-3xl font-bold text-purple-600" id="totalCredentials">0</div>
+        </div>
+      </div>
+
+      <!-- Verifications List -->
+      <div class="bg-white rounded-lg shadow">
+        <div class="px-6 py-4 border-b">
+          <h2 class="text-xl font-semibold">Background Checks</h2>
+        </div>
+        <div id="verificationsContainer" class="p-6">
+          <div class="text-center text-gray-500 py-8">
+            <div class="text-4xl mb-4">📋</div>
+            <p class="mb-2">No background checks yet</p>
+            <p class="text-sm">When an employer requests a background check, it will appear here.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Credentials Section -->
+    <div id="credentials" class="content-section hidden">
+      <h1 class="text-3xl font-bold text-gray-900 mb-8">My Digital Credentials</h1>
+
+      <div class="mb-6 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-6">
+        <h3 class="text-lg font-semibold mb-2">What are Digital Credentials?</h3>
+        <p class="text-gray-700">Digital credentials are cryptographically-secured, reusable verifications that you own. Share them with future employers to skip redundant background checks.</p>
+      </div>
+
+      <div id="credentialsContainer" class="grid md:grid-cols-2 gap-6">
+        <!-- Sample Credential Card -->
+        <div class="credential-card">
+          <div class="relative z-10">
+            <div class="flex justify-between items-start mb-4">
+              <div>
+                <div class="text-sm opacity-80 mb-1">Verified Credential</div>
+                <h3 class="text-xl font-bold">Comprehensive Background Check</h3>
+              </div>
+              <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm">Active</span>
+            </div>
+            <div class="space-y-2 text-sm mb-6">
+              <div>✓ Identity Verified</div>
+              <div>✓ Education Verified</div>
+              <div>✓ Employment Verified</div>
+              <div>✓ Criminal Record Clear</div>
+            </div>
+            <div class="flex space-x-3">
+              <button class="bg-white text-purple-600 px-4 py-2 rounded-lg font-medium hover:bg-opacity-90">
+                Share
+              </button>
+              <button class="bg-white bg-opacity-20 text-white px-4 py-2 rounded-lg font-medium hover:bg-opacity-30">
+                View Details
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- No credentials state -->
+        <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+          <div class="text-gray-400 text-4xl mb-3">🎫</div>
+          <h4 class="font-semibold text-gray-700 mb-2">No Credentials Yet</h4>
+          <p class="text-sm text-gray-500">Complete a background check to receive your first digital credential</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentUser = null;
+    let token = null;
+
+    // Check authentication
+    function checkAuth() {
+      token = localStorage.getItem('token');
+      const userStr = localStorage.getItem('user');
+      
+      if (!token || !userStr) {
+        window.location.href = '/login';
+        return false;
+      }
+      
+      currentUser = JSON.parse(userStr);
+      
+      if (currentUser.role !== 'candidate') {
+        alert('Access denied. Candidate account required.');
+        window.location.href = '/login';
+        return false;
+      }
+      
+      return true;
+    }
+
+    // API helper
+    async function apiCall(endpoint, options = {}) {
+      const defaultOptions = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      };
+      
+      const response = await fetch(endpoint, { ...defaultOptions, ...options });
+      const data = await response.json();
+      
+      if (response.status === 401 || response.status === 403) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        window.location.href = '/login';
+        throw new Error('Unauthorized');
+      }
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'API request failed');
+      }
+      
+      return data;
+    }
+
+    // Logout
+    function logout() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = '/login';
+    }
+
+    // Show section
+    function showSection(sectionId) {
+      document.querySelectorAll('.content-section').forEach(section => {
+        section.classList.add('hidden');
+      });
+      document.getElementById(sectionId).classList.remove('hidden');
+      
+      document.querySelectorAll('.nav-link').forEach(link => {
+        link.classList.remove('active');
+      });
+      document.querySelector(`[onclick="showSection('${sectionId}')"]`)?.classList.add('active');
+      
+      if (sectionId === 'credentials') {
+        loadCredentials();
+      }
+    }
+
+    // Load credentials
+    async function loadCredentials() {
+      try {
+        const credentials = await apiCall('/api/credentials/my-credentials');
+        document.getElementById('totalCredentials').textContent = credentials.length;
+        
+        if (credentials.length > 0) {
+          // Render actual credentials
+          console.log('Credentials:', credentials);
+        }
+      } catch (error) {
+        console.error('Error loading credentials:', error);
+      }
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      if (checkAuth()) {
+        document.getElementById('userName').textContent = currentUser.name;
+        // Load dashboard data would go here
+      }
+    });
+  </script>
+</body>
+</html>
